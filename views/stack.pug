@@ -1,0 +1,118 @@
+doctype html
+html(lang="en")
+    include includes/head.pug
+    body
+
+        //- Page Content
+        section
+        div(class="container")
+
+            a.btn.btn-primary(href='/home') Edit Flashcard
+            a.btn.btn-primary(href='/home') Edit Stack
+
+        div(class="container")
+            if flashcard
+                p(id="front")
+                p(id="back", style="display:none;")
+
+            form(method='POST')
+                input(type='text', name='answer', placeholder='answer')
+                p
+                input(type='submit', value='Incorrect')
+                input(type='submit', value='Hard')
+                input(type='submit', value='Medium')
+                input(type='submit', value='Easy')
+
+
+                div(class="container")
+                    if errors
+                        p
+                            each val in errors
+                                p=val
+
+        script(src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest")
+        script(src="https://cdn.jsdelivr.net/npm/@editorjs/header@2.7.0/dist/bundle.min.js")
+        script(src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest")
+        script(src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest")
+
+
+        script.
+            const frontData = !{flashcard.front}
+            const backData = !{flashcard.back}
+            console.log(backData)
+            document.getElementById("front").addEventListener("Click", () => {
+               if (document.getElementById("back").style.display === "block") {
+                   document.getElementById("back").style.display = "none"
+               } else {
+                   document.getElementById("back").style.display = "block"
+               }
+            })
+            const frontEditor = new EditorJS({
+                holder: 'front',
+
+                tools: {
+                    header: {
+                        class: Header,
+                        inlineToolbar: true,
+                    },
+                    list: {
+                        class: List,
+                        inlineToolbar: true,
+                        config: {
+                            defaultStyle: 'unordered'
+                        }
+                    },
+                    quote: {
+                        class: Quote,
+                        inlineToolbar: true,
+                        config: {
+                            quotePlaceholder: 'quote',
+                            captionPlaceholder: 'author',
+                        },
+                    },
+                },
+
+                readOnly: true,
+                data: frontData
+            })
+
+            const backEditor = new EditorJS({
+                holder: 'back',
+
+                tools: {
+                    header: {
+                        class: Header,
+                        inlineToolbar: true,
+                    },
+                    list: {
+                        class: List,
+                        inlineToolbar: true,
+                        config: {
+                            defaultStyle: 'unordered'
+                        }
+                    },
+                    quote: {
+                        class: Quote,
+                        inlineToolbar: true,
+                        config: {
+                            quotePlaceholder: 'quote',
+                            captionPlaceholder: 'author',
+                        },
+                    },
+                },
+
+                readOnly: true,
+                data: backData
+
+
+            })
+
+
+
+
+
+
+
+
+        script(src='vendor/jquery/jquery.min.js')
+        script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')

@@ -1,0 +1,44 @@
+doctype html
+html(lang="en")
+    include includes/head.pug
+    body
+
+        //- Page Content
+        section
+        div(class="container")
+            if parent
+                p=parent
+
+                a.btn.btn-primary(href='/home') Home
+                a.btn.btn-primary(href='/home?id=' + parent) Up
+            else if directlyUnderRoot
+                a.btn.btn-primary(href='/home') Home
+        div(class="container")
+            form(method='POST')
+                input(type='text', name='folderName', placeholder='name')
+                input(type='submit', value='create new folder')
+            form(method='POST')
+                input(type='text', name='stackName', placeholder='name')
+                input(type='submit', value='create new stack')
+
+            div(class="container")
+                if folderObjects
+                    p
+                        each val in folderObjects
+                            p
+                                a(href='/home?id=' + val.folderID)=val.folderName
+            div(class="container")
+                if stackObjects
+                    p
+                        each val in stackObjects
+                            p
+                                a(href='/stack?id=' + val.stackID)=val.stackName
+                div(class="container")
+                    if errors
+                        p
+                            each val in errors
+                                p=val
+
+
+        script(src='vendor/jquery/jquery.min.js')
+        script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')

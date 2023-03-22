@@ -1,0 +1,21 @@
+doctype html
+html(lang="en")
+    include includes/head.pug
+    body
+
+        //- Page Content
+        section
+            div(class="container")
+                form(action='/login', method='POST')
+                    input(type='text', name='emailOrUsername', placeholder='email address or username')
+                    input(type='password', name='password', placeholder='password')
+                    input(type='submit')
+
+                if errors
+                    div
+                        each val in errors
+                            p=val
+
+
+        script(src='vendor/jquery/jquery.min.js')
+        script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')

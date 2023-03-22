@@ -1,0 +1,100 @@
+doctype html
+html(lang="en")
+    include includes/head.pug
+    body
+
+        //- Page Content
+        section
+
+        form(method='POST')
+            input(type='hidden', name='frontData')
+            input(type='hidden', name='backData')
+
+        div(class="container")
+            p(id="front")
+            p(id="back")
+            a.btn.btn-primary() submit
+
+
+                div(class="container")
+                    if errors
+                        p
+                            each val in errors
+                                p=val
+
+        script(src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest")
+        script(src="https://cdn.jsdelivr.net/npm/@editorjs/header@2.7.0/dist/bundle.min.js")
+        script(src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest")
+        script(src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest")
+
+
+        script.
+            const frontData = !{flashcard.front}
+            const backData = !{flashcard.back}
+            const frontEditor = new EditorJS({
+                holder: 'front',
+
+                tools: {
+                    header: {
+                        class: Header,
+                        inlineToolbar: true,
+                    },
+                    list: {
+                        class: List,
+                        inlineToolbar: true,
+                        config: {
+                            defaultStyle: 'unordered'
+                        }
+                    },
+                    quote: {
+                        class: Quote,
+                        inlineToolbar: true,
+                        config: {
+                            quotePlaceholder: 'qucaptionPlaceholder: \'author\',\note',
+                            captionPlaceholder: 'author',
+                        },
+                    },
+                },
+
+                data: frontData
+            })
+
+            const backEditor = new EditorJS({
+                holder: 'back',
+
+                tools: {
+                    header: {
+                        class: Header,
+                        inlineToolbar: true,
+                    },
+                    list: {
+                        class: List,
+                        inlineToolbar: true,
+                        config: {
+                            defaultStyle: 'unordered'
+                        }
+                    },
+                    quote: {
+                        class: Quote,
+                        inlineToolbar: true,
+                        config: {
+                            quotePlaceholder: 'quote',
+                            captionPlaceholder: 'author',
+                        },
+                    },
+                },
+
+                data: backData
+
+
+            })
+
+
+
+
+
+
+
+
+        script(src='vendor/jquery/jquery.min.js')
+        script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')

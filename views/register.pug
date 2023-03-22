@@ -1,0 +1,24 @@
+doctype html
+html(lang="en")
+    include includes/head.pug
+    body
+
+        //- Page Content
+        section
+            div(class="container")
+                form(action='/register', method='POST')
+                    input(type='text', name='email', placeholder='email address')
+                    input(type='text', name='username', placeholder='username')
+                    input(type='password', name='password', placeholder='password')
+                    input(type='submit')
+                if errors
+                    ul
+                        each val in errors
+                            ul=val
+                if duplicates
+                    ul
+                        each val in duplicates
+                            ul=val
+
+        script(src='vendor/jquery/jquery.min.js')
+        script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
