@@ -6,10 +6,10 @@ html(lang="en")
         //- Page Content
         section
             div(class="container")
-                form(action='/login', method='POST')
-                    input(type='text', name='emailOrUsername', placeholder='email address or username')
-                    input(type='password', name='password', placeholder='password')
-                    input(type='submit')
+                form(action="/login", method="POST")
+                    input(type="text", name="emailOrUsername", placeholder="email address or username")
+                    input(type="password", name="password", placeholder="password")
+                    input(type="submit")
 
                 if errors
                     div
@@ -17,5 +17,5 @@ html(lang="en")
                             p=val
 
 
-        script(src='vendor/jquery/jquery.min.js')
-        script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+        script(src="vendor/jquery/jquery.min.js")
+        script(src="vendor/bootstrap/js/bootstrap.bundle.min.js")

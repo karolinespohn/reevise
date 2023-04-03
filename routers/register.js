@@ -8,14 +8,14 @@ exports.register = async function (req, res) {
         const validEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
 
         // mail
-        if (!validEmailRegex.test(req.body.email)) errors.push('please enter a valid email address')
+        if (!validEmailRegex.test(req.body.email)) errors.push("please enter a valid email address")
         // username
-        if (!validUsernameRegex.test(req.body.username)) errors.push('please enter a valid username')
+        if (!validUsernameRegex.test(req.body.username)) errors.push("please enter a valid username")
         // password
-        if (req.body.password.length < 8 || req.body.password.length > 32) errors.push('please enter a valid password between 8 and 32 characters')
+        if (req.body.password.length < 8 || req.body.password.length > 32) errors.push("please enter a valid password between 8 and 32 characters")
 
         if (errors.length !== 0) {
-            res.render('register', {errors: errors})
+            res.render("register", {errors: errors})
             return;
         }
 
@@ -29,23 +29,23 @@ exports.register = async function (req, res) {
 
             let duplicateUsers = await db.query('SELECT * FROM users WHERE username = $1', req.body.username);
             if (duplicateUsers.length !== 0) {
-                duplicates.push('this username is already taken')
+                duplicates.push("this username is already taken")
             }
 
             // checks if email is already taken
             let duplicateEmail = await db.query('SELECT * FROM users WHERE email = $1', req.body.email);
             if (duplicateEmail.length !== 0) {
-                duplicates.push('there is already an account registered to this email address')
+                duplicates.push("there is already an account registered to this email address")
             }
-            res.render('register', {duplicates: duplicates})
+            res.render("register", {duplicates: duplicates})
            // console.log(duplicates)
             return;
         }
 
-        res.redirect('/home')
+        res.redirect("/home")
 
 
     } else {
-        res.render('register', {});
+        res.render("register", {});
     }
 }

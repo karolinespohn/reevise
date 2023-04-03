@@ -1,6 +1,6 @@
-const db = require('./db')
+const db = require("./db")
 const jwt = require("jsonwebtoken");
-require('dotenv').config();
+require("dotenv").config();
 exports.login = async function (req, res) {
     // user submitted data
     if (req.body && req.body.emailOrUsername && req.body.password) {
@@ -13,11 +13,11 @@ exports.login = async function (req, res) {
             const validEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
 
             if (validEmailRegex.test(req.body.emailOrUsername)) {
-                errors.push('there is no account registered to this email address')
+                errors.push("there is no account registered to this email address")
             } else {
-                errors.push('there is no account registered to this username')
+                errors.push("there is no account registered to this username")
             }
-            res.render('login', {errors: errors})
+            res.render("login", {errors: errors})
             // there is an user with this username/email
         } else {
             // check password if username was entered
@@ -26,14 +26,14 @@ exports.login = async function (req, res) {
                 let token = jwt.sign({
                     uid: uid,
                 }, process.env.jvtSecretKey)
-                res.cookie('jwt', token, {httpOnly: true, sameSite: "strict",})
+                res.cookie("jwt", token, {httpOnly: true, sameSite: "strict",})
                 res.redirect('/home')
             } else {
-                res.render('login', {errors: ['incorrect password']})
+                res.render("login", {errors: ["incorrect password"]})
             }
         }
         // user hasn't submitted data yet
     } else {
-        res.render('login', {});
+        res.render("login", {});
     }
 }

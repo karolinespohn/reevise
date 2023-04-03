@@ -6,11 +6,11 @@ html(lang="en")
         //- Page Content
         section
             div(class="container")
-                form(action='/register', method='POST')
-                    input(type='text', name='email', placeholder='email address')
-                    input(type='text', name='username', placeholder='username')
-                    input(type='password', name='password', placeholder='password')
-                    input(type='submit')
+                form(action="/register", method="POST")
+                    input(type="text", name="email", placeholder="email address")
+                    input(type="text", name="username", placeholder="username")
+                    input(type="password", name="password", placeholder="password")
+                    input(type="submit")
                 if errors
                     ul
                         each val in errors
@@ -20,5 +20,5 @@ html(lang="en")
                         each val in duplicates
                             ul=val
 
-        script(src='vendor/jquery/jquery.min.js')
-        script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+        script(src="vendor/jquery/jquery.min.js")
+        script(src="vendor/bootstrap/js/bootstrap.bundle.min.js")

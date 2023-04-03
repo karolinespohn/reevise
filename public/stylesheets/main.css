@@ -1,10 +1,42 @@
 body {
-  background: url('../images/bg_pug.jpg') no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  -o-background-size: cover;
+    /*background: url('../images/bg_pug.jpg') no-repeat center center fixed;*/
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'M PLUS 1', sans-serif;
+
 }
+
 .container {
-  background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 1);
 }
+
+
+/*
+things i want to keep in main
+*/
+
+.closeButton {
+    height: 16px;
+    width: 16px;
+    font-size: 16px;
+    border-radius: 50%;
+    background-color: #fb8f82;
+    border: hidden;
+    line-height: 14px;
+    text-indent: -1px;
+}
+
+.closeButton:hover {
+    background-color: #f96a59;
+}
+.closeButton:focus {
+    outline: none;
+}
+.hiddenError {
+    display: none;
+}
+o

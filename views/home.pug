@@ -4,41 +4,161 @@ html(lang="en")
     body
 
         //- Page Content
-        section
-        div(class="container")
-            if parent
-                p=parent
+        div.header
+            //-
+                popups
+            //
+        div.popupBackgroundHidden.popupBackground(id="popup-background")
 
-                a.btn.btn-primary(href='/home') Home
-                a.btn.btn-primary(href='/home?id=' + parent) Up
-            else if directlyUnderRoot
-                a.btn.btn-primary(href='/home') Home
-        div(class="container")
-            form(method='POST')
-                input(type='text', name='folderName', placeholder='name')
-                input(type='submit', value='create new folder')
-            form(method='POST')
-                input(type='text', name='stackName', placeholder='name')
-                input(type='submit', value='create new stack')
+            div.popupHidden.popup(id="new-folder-popup")
+                form(id="new-folder-form", method="POST")
+                    button.closeButton(id="close-folder-popup-button")
+                    div.popupInputContainer()
+                        input.nameInput(id="new-folder-name", name="folderName", type="text", placeholder="name")
+                        input.createButton(id="create-folder-button", type="submit", value="create folder")
+                    div.popupError()
+                        p(id="folder-name-error", style="display:none") please enter a valid name
 
-            div(class="container")
-                if folderObjects
-                    p
-                        each val in folderObjects
+
+            div.popupHidden.popup(id="new-stack-popup")
+                form(id="new-stack-form", method="POST")
+                    button.closeButton(id="close-stack-popup-button")
+                    div.popupInputContainer()
+                        input.nameInput(id="new-stack-name", name="stackName", type="text", placeholder="name")
+                        input.createButton(id="create-stack-button", type="submit", value="create stack")
+                    div.popupError()
+                        p(id="stack-name-error", style="display:none") please enter a valid name
+
+        //-
+          file system
+        //
+        div.fileSystem
+
+            div.fileSystemHeader
+                div.leftFileSystemHeaderButtons
+                    // checks if were directly under the root folder, if yes shows "Home" and "Up" button
+                    if parent
+                        a.fileSystemHeaderButton(href="/home") Home
+                        a.fileSystemHeaderButton(href="/home?id=" + parent) Up
+                    else if directlyUnderRoot
+                        a.fileSystemHeaderButton(href="/home") Home
+                div.rightFileSystemHeaderButtons
+                    button.fileSystemHeaderButton(id="new-folder") New Folder
+                    button.fileSystemHeaderButton(id="new-stack") New Stack
+
+            div.foldersAndStacks
+                div.foldersSection
+                    if folderObjects.length > 0
+                        p.fileSystemHeadline Folders
+                        div.folderOrStackList
+                            each val in folderObjects
+                                p
+                                    a(href="/home?id=" + val.folderID)=val.folderName
+                if folderObjects.length > 0 && stackObjects.length > 0
+                    hr
+                div.stacksSection
+                    if stackObjects.length > 0
+                        p.fileSystemHeadline Stacks
+                        div.folderOrStackList
+                            each val in stackObjects
+                                p
+                                    a(href="/stack?id=" + val.stackID)=val.stackName
+                    div(class="container")
+                        if errors
                             p
-                                a(href='/home?id=' + val.folderID)=val.folderName
-            div(class="container")
-                if stackObjects
-                    p
-                        each val in stackObjects
-                            p
-                                a(href='/stack?id=' + val.stackID)=val.stackName
-                div(class="container")
-                    if errors
-                        p
-                            each val in errors
-                                p=val
+                                each val in errors
+                                    p=val
 
 
-        script(src='vendor/jquery/jquery.min.js')
-        script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+        script(src="vendor/jquery/jquery.min.js")
+        script(src="vendor/bootstrap/js/bootstrap.bundle.min.js")
+
+        script.
+            // new folder button functionality
+            document.getElementById("new-folder").addEventListener("click", () => {
+                document.getElementById("new-folder-popup").classList.remove("popupHidden")
+                document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
+            })
+
+            // close new folder popup by clicking on close button
+            document.getElementById("close-folder-popup-button").addEventListener("click", (e) => {
+                e.preventDefault()
+                document.getElementById("new-folder-popup").classList.add("popupHidden")
+                document.getElementById("popup-background").classList.add("popupBackgroundHidden")
+                document.getElementById("new-folder-name").value = ''
+                document.getElementById("folder-name-error").style.display = "none"
+
+            })
+
+            //close new folder popup by clicking on background
+            document.getElementById("new-folder-popup").addEventListener("click", (e) => {
+                e.stopPropagation()
+            })
+            document.getElementById("popup-background").addEventListener("click", (e) => {
+                e.preventDefault()
+                document.getElementById("new-folder-popup").classList.add("popupHidden")
+                document.getElementById("popup-background").classList.add("popupBackgroundHidden")
+                document.getElementById("new-folder-name").value = ''
+                document.getElementById("folder-name-error").style.display = "none"
+
+            })
+
+            // check if name is valid (between 1 and 64 chars, consisiting of not only white spaces)
+            document.getElementById("new-folder-form").addEventListener("submit", (e) => {
+                const nameInput = document.getElementById("new-folder-name")
+                if (!nameInput.value || nameInput.value.length > 64 || nameInput.value.trim() === "") {
+                    e.preventDefault()
+                    document.getElementById("folder-name-error").style.display = "block"
+                }
+            })
+            // send new folder form by pressing on enter while in nameInput field
+            document.getElementById("new-folder-name").addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault()
+                    document.getElementById("new-folder-form").submit();
+                }
+            })
+
+            // new stack button functionality
+            document.getElementById("new-stack").addEventListener("click", () => {
+                document.getElementById("new-stack-popup").classList.remove("popupHidden")
+                document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
+            })
+
+            // close new stack popup by clicking on close button
+            document.getElementById("close-stack-popup-button").addEventListener("click", (e) => {
+                e.preventDefault()
+                document.getElementById("new-stack-popup").classList.add("popupHidden")
+                document.getElementById("popup-background").classList.add("popupBackgroundHidden")
+                document.getElementById("new-stack-name").value = ''
+                document.getElementById("stack-name-error").style.display = "none"
+            })
+
+            // close new stack popup by clicking on background
+
+            document.getElementById("new-stack-popup").addEventListener("click", (e) => {
+                e.stopPropagation()
+            })
+            document.getElementById("popup-background").addEventListener("click", (e) => {
+                e.preventDefault()
+                document.getElementById("new-stack-popup").classList.add("popupHidden")
+                document.getElementById("popup-background").classList.add("popupBackgroundHidden")
+                document.getElementById("new-stack-name").value = ''
+                document.getElementById("stack-name-error").style.display = "none"
+            })
+            // check if name is valid (between 1 and 64 chars, consisiting of not only white spaces)
+            document.getElementById("new-stack-form").addEventListener("submit", (e) => {
+                const nameInput = document.getElementById("new-stack-name")
+                if (!nameInput.value || nameInput.value.length > 64 || nameInput.value.trim() === "") {
+                    e.preventDefault()
+                    document.getElementById("stack-name-error").style.display = "block"
+                }
+            })
+            // send new stack form by pressing on enter while in nameInput field
+            document.getElementById("new-stack-name").addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault()
+                    document.getElementById("new-stack-form").submit();
+                }
+            })
+

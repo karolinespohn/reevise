@@ -6,14 +6,14 @@ html(lang="en")
         //- Page Content
         section
 
-        form(method='POST')
-            input(type='hidden', name='frontData')
-            input(type='hidden', name='backData')
+        form(id="inputForm", method="POST")
+            input(id="frontDataInput", type="hidden", name="frontDataInput")
+            input(id="backDataInput", type="hidden", name="backDataInput")
 
         div(class="container")
             p(id="front")
             p(id="back")
-            a.btn.btn-primary() submit
+            button(id="submit") submit
 
 
                 div(class="container")
@@ -29,10 +29,11 @@ html(lang="en")
 
 
         script.
+
             const frontData = !{flashcard.front}
             const backData = !{flashcard.back}
             const frontEditor = new EditorJS({
-                holder: 'front',
+                holder: "front",
 
                 tools: {
                     header: {
@@ -43,24 +44,28 @@ html(lang="en")
                         class: List,
                         inlineToolbar: true,
                         config: {
-                            defaultStyle: 'unordered'
+                            defaultStyle: "unordered"
                         }
                     },
                     quote: {
                         class: Quote,
                         inlineToolbar: true,
                         config: {
-                            quotePlaceholder: 'qucaptionPlaceholder: \'author\',\note',
-                            captionPlaceholder: 'author',
+                            quotePlaceholder: "quote",
+                            captionPlaceholder: "author",
                         },
                     },
                 },
 
                 data: frontData
             })
+            document.getElementById("submit").addEventListener("Click", () => {
+
+            })
+
 
             const backEditor = new EditorJS({
-                holder: 'back',
+                holder: "back",
 
                 tools: {
                     header: {
@@ -71,30 +76,32 @@ html(lang="en")
                         class: List,
                         inlineToolbar: true,
                         config: {
-                            defaultStyle: 'unordered'
+                            defaultStyle: "unordered"
                         }
                     },
                     quote: {
                         class: Quote,
                         inlineToolbar: true,
                         config: {
-                            quotePlaceholder: 'quote',
-                            captionPlaceholder: 'author',
+                            quotePlaceholder: "quote",
+                            captionPlaceholder: "author",
                         },
                     },
                 },
 
                 data: backData
 
+            })
+            document.getElementById("submit").addEventListener("click", async () => {
 
+                const frontEditorContent = JSON.stringify(await frontEditor.save())
+                document.getElementById("frontDataInput").value = frontEditorContent
+
+                const backEditorContent = JSON.stringify(await backEditor.save())
+                document.getElementById("backDataInput").value = backEditorContent
+
+            document.getElementById("inputForm").submit()
             })
 
-
-
-
-
-
-
-
-        script(src='vendor/jquery/jquery.min.js')
-        script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+        script(src="vendor/jquery/jquery.min.js")
+        script(src="vendor/bootstrap/js/bootstrap.bundle.min.js")

@@ -6,22 +6,31 @@ html(lang="en")
         //- Page Content
         section
         div(class="container")
+            if directlyUnderRoot
+             a.btn.btn-primary(href="/home") Home
+            else
+             a.btn.btn-primary(href="/home") Home
+             a.btn.btn-primary(href="/home?id=" + parentFolder) Up
 
-            a.btn.btn-primary(href='/home') Edit Flashcard
-            a.btn.btn-primary(href='/home') Edit Stack
+            if flashcard
+                a.btn.btn-primary(href="/editStack") Edit Stack
+                a.btn.btn-primary(href="/edit?id=" + flashcard.flashcardID) Edit Flashcard
+                a.btn.btn-primary(href="/edit?parentID=" + flashcardParent) New Flashcard
+
 
         div(class="container")
             if flashcard
                 p(id="front")
                 p(id="back", style="display:none;")
 
-            form(method='POST')
-                input(type='text', name='answer', placeholder='answer')
+            form(method="POST")
+                //input(type="text", name="answer", placeholder="answer")
                 p
-                input(type='submit', value='Incorrect')
-                input(type='submit', value='Hard')
-                input(type='submit', value='Medium')
-                input(type='submit', value='Easy')
+                input(name="answeredFlashcard", type="hidden", value= flashcard)
+                input(name="difficulty", type="submit", value="Incorrect")
+                input(name="difficulty", type="submit", value="Hard")
+                input(name="difficulty", type="submit", value="Medium")
+                input(name="difficulty", type="submit", value="Easy")
 
 
                 div(class="container")
@@ -37,18 +46,22 @@ html(lang="en")
 
 
         script.
+            // "saves" flashcard that was just answered so the database can be adjusted
+
             const frontData = !{flashcard.front}
+            console.log(frontData)
             const backData = !{flashcard.back}
             console.log(backData)
-            document.getElementById("front").addEventListener("Click", () => {
+            document.getElementById("front").addEventListener("click", () => {
                if (document.getElementById("back").style.display === "block") {
                    document.getElementById("back").style.display = "none"
                } else {
                    document.getElementById("back").style.display = "block"
                }
             })
+
             const frontEditor = new EditorJS({
-                holder: 'front',
+                holder: "front",
 
                 tools: {
                     header: {
@@ -59,15 +72,15 @@ html(lang="en")
                         class: List,
                         inlineToolbar: true,
                         config: {
-                            defaultStyle: 'unordered'
+                            defaultStyle: "unordered"
                         }
                     },
                     quote: {
                         class: Quote,
                         inlineToolbar: true,
                         config: {
-                            quotePlaceholder: 'quote',
-                            captionPlaceholder: 'author',
+                            quotePlaceholder: "quote",
+                            captionPlaceholder: "author",
                         },
                     },
                 },
@@ -77,7 +90,7 @@ html(lang="en")
             })
 
             const backEditor = new EditorJS({
-                holder: 'back',
+                holder: "back",
 
                 tools: {
                     header: {
@@ -88,15 +101,15 @@ html(lang="en")
                         class: List,
                         inlineToolbar: true,
                         config: {
-                            defaultStyle: 'unordered'
+                            defaultStyle: "unordered"
                         }
                     },
                     quote: {
                         class: Quote,
                         inlineToolbar: true,
                         config: {
-                            quotePlaceholder: 'quote',
-                            captionPlaceholder: 'author',
+                            quotePlaceholder: "quote",
+                            captionPlaceholder: "author",
                         },
                     },
                 },
@@ -114,5 +127,5 @@ html(lang="en")
 
 
 
-        script(src='vendor/jquery/jquery.min.js')
-        script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+        script(src="vendor/jquery/jquery.min.js")
+        script(src="vendor/bootstrap/js/bootstrap.bundle.min.js")
