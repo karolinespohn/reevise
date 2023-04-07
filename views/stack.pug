@@ -4,40 +4,46 @@ html(lang="en")
     body
 
         //- Page Content
-        section
-        div(class="container")
-            if directlyUnderRoot
-             a.btn.btn-primary(href="/home") Home
-            else
-             a.btn.btn-primary(href="/home") Home
-             a.btn.btn-primary(href="/home?id=" + parentFolder) Up
-
-            if flashcard
-                a.btn.btn-primary(href="/editStack") Edit Stack
-                a.btn.btn-primary(href="/edit?id=" + flashcard.flashcardID) Edit Flashcard
-                a.btn.btn-primary(href="/edit?parentID=" + flashcardParent) New Flashcard
-
-
-        div(class="container")
-            if flashcard
-                p(id="front")
-                p(id="back", style="display:none;")
-
-            form(method="POST")
-                //input(type="text", name="answer", placeholder="answer")
-                p
-                input(name="answeredFlashcard", type="hidden", value= flashcard)
-                input(name="difficulty", type="submit", value="Incorrect")
-                input(name="difficulty", type="submit", value="Hard")
-                input(name="difficulty", type="submit", value="Medium")
-                input(name="difficulty", type="submit", value="Easy")
+        div.stackView.contentSection
+            div.sectionHeader
+                div.leftSectionHeaderButtonContainer
+                    if directlyUnderRoot
+                     a.sectionHeaderButton(href="/home") home
+                    else
+                     a.sectionHeaderButton(href="/home") home
+                     a.sectionHeaderButton(href="/home?id=" + parentFolder) up
+                div.rightSectionHeaderButtonContainer
+                    if flashcard
+                     a.sectionHeaderButton(href="/editStack") edit stack
+                     a.sectionHeaderButton(href="/edit?id=" + flashcard.flashcardID) edit card
+                     a.sectionHeaderButton(href="/edit?parentID=" + flashcardParent) new card
 
 
-                div(class="container")
-                    if errors
+            div.flashcard
+                if flashcard
+                    div.flashcardContents(id="flashcardContents")
+                        div.front(id="front")
+                        //p.backPlaceholder(id="backPlaceholder", style="display:block")
+                        div.back
+                            div(id="back")
+
+                    form(method="POST")
+                        //input(type="text", name="answer", placeholder="answer")
                         p
-                            each val in errors
-                                p=val
+                        input(name="answeredFlashcard", type="hidden", value= flashcard)
+                        div.difficultyButtonsContainer
+                            input.difficultyButton(name="difficulty", type="submit", value="Incorrect")
+                            input.difficultyButton(name="difficulty", type="submit", value="Hard")
+                            input.difficultyButton(name="difficulty", type="submit", value="Medium")
+                            input.difficultyButton(name="difficulty", type="submit", value="Easy")
+
+
+                    div(class="container")
+                        if errors
+                            p
+                                each val in errors
+                                    p=val
+
 
         script(src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest")
         script(src="https://cdn.jsdelivr.net/npm/@editorjs/header@2.7.0/dist/bundle.min.js")
@@ -52,11 +58,13 @@ html(lang="en")
             console.log(frontData)
             const backData = !{flashcard.back}
             console.log(backData)
-            document.getElementById("front").addEventListener("click", () => {
+            document.getElementById("flashcardContents").addEventListener("click", () => {
                if (document.getElementById("back").style.display === "block") {
                    document.getElementById("back").style.display = "none"
+                   document.getElementById("backPlaceholder").style.display= "block"
                } else {
                    document.getElementById("back").style.display = "block"
+                   document.getElementById("backPlaceholder").style.display = "none"
                }
             })
 

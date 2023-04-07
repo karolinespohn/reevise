@@ -4,17 +4,25 @@ html(lang="en")
     body
 
         //- Page Content
-        section
-            div(class="container")
-                form(action="/login", method="POST")
-                    input(type="text", name="emailOrUsername", placeholder="email address or username")
-                    input(type="password", name="password", placeholder="password")
-                    input(type="submit")
-
+        div.contentSection.loginRegisterPage
+            p.loginRegisterHeadline login.
+            form(action="/login", method="POST")
+                p
+                    input.inputField.loginRegisterFormInput(type="text", name="emailOrUsername", placeholder="email address or username")
+                p
+                    input.inputField.loginRegisterFormInput(type="password", name="password", placeholder="password")
+                p
+                    input.submitFormButton.loginRegisterButton(type="submit", value="login")
+            p.errorMessage
                 if errors
-                    div
-                        each val in errors
-                            p=val
+                    each val in errors
+                        p=val
+
+            hr.loginRegisterHr
+            div.loginRegisterRedirectSection
+                p don't have an account yet?
+                p
+                    a.loginRegisterRedirect(href="/register") register
 
 
         script(src="vendor/jquery/jquery.min.js")

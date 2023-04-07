@@ -1,0 +1,60 @@
+.stackView {
+    display: flex;
+    flex-direction: column;
+    height: 98vh;
+}
+
+.flashcard {
+
+}
+
+.flashcardContents {
+     display: flex;
+    flex-direction: column;
+}
+
+
+.front,
+.back,
+.backPlaceholder{
+    margin-top: 16px;
+    height: calc(40vh - 56px);
+    overflow: auto;
+    margin-left: 32px;
+    margin-right: 32px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 11 */
+    border: solid 1px #cfdbf6;
+    border-radius: 8px;
+}
+
+
+.front::-webkit-scrollbar,
+.back::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
+}
+
+.difficultyButtonsContainer {
+    padding: 64px;
+    height: 6vh;
+    display: flex;
+    justify-content: space-between;
+}
+
+.difficultyButton {
+
+    background-color: white;
+    border-radius: 8px;
+    height: 42px;
+    font-size: 16px;
+    line-height: 16px;
+    border: 1px solid #798DBF;
+    width: calc(25% - 4px);
+}
+.difficultyButton:hover {
+    background-color: #f8f8f8;
+    border-color: black;
+}
+
+
+

@@ -14,10 +14,9 @@ body {
     background-color: rgba(255, 255, 255, 1);
 }
 
-
 /*
-things i want to keep in main
-*/
+form components
+ */
 
 .closeButton {
     height: 16px;
@@ -39,4 +38,99 @@ things i want to keep in main
 .hiddenError {
     display: none;
 }
-o
+
+.inputField {
+    text-align: center;
+    border-radius: 8px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    height: 42px;
+    border: 1px solid #798DBF;
+}
+
+.inputField:hover {
+    border-color: black;
+    background-color: #f8f8f8;
+}
+
+.inputField:focus::placeholder {
+    opacity: 0;
+}
+
+.submitFormButton {
+    background-color: white;
+    border-radius: 8px;
+    height: 42px;
+    font-size: 16px;
+    line-height: 16px;
+    margin-top: 12px;
+    margin-bottom: 8px;
+    border: 1px solid #798DBF
+}
+
+
+.submitFormButton:hover {
+    background-color: #f8f8f8;
+    border-color: black;
+
+}
+/*
+page content
+ */
+
+.contentSection {
+    border-radius: 8px;
+    background-color: white;
+    margin: 12px 10%;
+    height: 95vh;
+    position: relative;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.28);
+}
+/*
+section header
+ */
+
+.sectionHeader {
+    margin-right: 4px;
+    margin-left: 4px;
+    border-bottom: 1px solid #798DBF;
+    height: 112px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sectionHeaderButton,
+.sectionHeaderButton a {
+    line-height: 42px;
+    color: #58616E;
+    border: none;
+    background-color: white;
+    margin:2px;
+    height: 42px;
+    width: 112px;
+    border-radius: 6px;
+    display: inline-block;
+    text-align: center;
+    justify-content: center;
+}
+
+.sectionHeaderButton:hover,
+a.sectionHeaderButton:hover {
+    background-color: #f8f8f8;
+    border-color: black;
+    color: inherit;
+    text-decoration: none;
+}
+
+.rightSectionHeaderButtonContainer {
+    display: flex;
+    align-items: center;
+    margin-right: 32px;
+}
+
+.leftSectionHeaderButtonContainer {
+    display: flex;
+    align-items: center;
+    margin-left: 32px;
+}

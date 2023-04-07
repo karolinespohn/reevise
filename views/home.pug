@@ -14,8 +14,8 @@ html(lang="en")
                 form(id="new-folder-form", method="POST")
                     button.closeButton(id="close-folder-popup-button")
                     div.popupInputContainer()
-                        input.nameInput(id="new-folder-name", name="folderName", type="text", placeholder="name")
-                        input.createButton(id="create-folder-button", type="submit", value="create folder")
+                        input.inputField.nameInput(id="new-folder-name", name="folderName", type="text", placeholder="name")
+                        input.submitFormButton.createButton(id="create-folder-button", type="submit", value="create folder")
                     div.popupError()
                         p(id="folder-name-error", style="display:none") please enter a valid name
 
@@ -24,32 +24,32 @@ html(lang="en")
                 form(id="new-stack-form", method="POST")
                     button.closeButton(id="close-stack-popup-button")
                     div.popupInputContainer()
-                        input.nameInput(id="new-stack-name", name="stackName", type="text", placeholder="name")
-                        input.createButton(id="create-stack-button", type="submit", value="create stack")
+                        input.inputField.nameInput(id="new-stack-name", name="stackName", type="text", placeholder="name")
+                        input.submitFormButton.createButton(id="create-stack-button", type="submit", value="create stack")
                     div.popupError()
                         p(id="stack-name-error", style="display:none") please enter a valid name
 
         //-
           file system
         //
-        div.fileSystem
+        div.fileSystem.contentSection
 
-            div.fileSystemHeader
-                div.leftFileSystemHeaderButtons
+            div.sectionHeader
+                div.leftSectionHeaderButtonContainer
                     // checks if were directly under the root folder, if yes shows "Home" and "Up" button
                     if parent
-                        a.fileSystemHeaderButton(href="/home") Home
-                        a.fileSystemHeaderButton(href="/home?id=" + parent) Up
+                        a.sectionHeaderButton(href="/home") home
+                        a.sectionHeaderButton(href="/home?id=" + parent) up
                     else if directlyUnderRoot
-                        a.fileSystemHeaderButton(href="/home") Home
-                div.rightFileSystemHeaderButtons
-                    button.fileSystemHeaderButton(id="new-folder") New Folder
-                    button.fileSystemHeaderButton(id="new-stack") New Stack
+                        a.sectionHeaderButton(href="/home") home
+                div.rightSectionHeaderButtonContainer
+                    button.sectionHeaderButton(id="new-folder") new folder
+                    button.sectionHeaderButton(id="new-stack") new stack
 
             div.foldersAndStacks
                 div.foldersSection
                     if folderObjects.length > 0
-                        p.fileSystemHeadline Folders
+                        p.fileSystemHeadline folders
                         div.folderOrStackList
                             each val in folderObjects
                                 p
@@ -58,7 +58,7 @@ html(lang="en")
                     hr
                 div.stacksSection
                     if stackObjects.length > 0
-                        p.fileSystemHeadline Stacks
+                        p.fileSystemHeadline stacks
                         div.folderOrStackList
                             each val in stackObjects
                                 p

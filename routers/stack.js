@@ -13,7 +13,6 @@ exports.stack = async function (req, res) {
     let flashcard
 
     try {
-
         let result = await db.query('SELECT * FROM flashcards WHERE parent  = $1 order by "nextLearningDate" limit 1',
             [req.query.id])
 
@@ -24,7 +23,6 @@ exports.stack = async function (req, res) {
     }
     let flashcardID
     let flashcardParent = req.query.id
-    console.log(typeof flashcard)
     if (typeof flashcard !== "undefined") {
         flashcard.front = JSON.stringify(flashcard.front)
         flashcard.back = JSON.stringify(flashcard.back)
@@ -37,7 +35,6 @@ exports.stack = async function (req, res) {
     }
     let parentFolder = await db.query('SELECT parent FROM stacks WHERE "stackID" = $1', [req.query.id])
     parentFolder = parentFolder[0].parent
-    console.log(parentFolder)
     // checks if parent is root
     let directlyUnderRoot = parentFolder === null
 
@@ -105,8 +102,6 @@ async function adjustFlashcard(difficulty, answeredFlashcard) {
     console.log(index)
 
     const nextLearningDate = nextLearningDateArray[answeredFlashcard.level][index]
-
-
 
     await db.none('update flashcards SET "lastLearningDate" = $1, "nextLearningDate" = $2, "timesAnsweredIncorrectly" = $3, "timesAnsweredHard" = $4, "timesAnsweredMedium" = $5, "timesAnsweredEasy" = $6, "level" = $7 where "flashcardID" = $8',
         [lastLearningDate, nextLearningDate, timesAnsweredIncorrectly, timesAnsweredHard, timesAnsweredMedium, timesAnsweredEasy, newLevel, answeredFlashcard.flashcardID])
