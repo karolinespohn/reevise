@@ -56,6 +56,34 @@ exports.home = async function (req, res) {
         }
     }
 
+    // user renames folder
+    if (req.body && req.body.changedFolderName) {
+        if (!req.body.changedFolderName.length < 1 || !req.body.changedFolderName.length > 64) {
+            try {
+                await db.none('update folders SET "folderName" = $1 where "folderID"= $2', [req.body.changedFolderName, req.body.changedFolderID])
+                res.redirect(req.url)
+                return
+            } catch (e) {
+                errors.push("internal error")
+
+            }
+        }
+    }
+    // user renames stack
+    if (req.body && req.body.changedStackName) {
+        console.log("aaaa")
+        if (!req.body.changedStackName.length < 1 || !req.body.changedStackName.length > 64) {
+            try {
+                await db.none('update stacks SET "stackName" = $1 where "stackID"= $2', [req.body.changedStackName, req.body.changedStackID])
+                res.redirect(req.url)
+                return
+            } catch (e) {
+                errors.push("internal error")
+
+            }
+        }
+    }
+
     let folders = [];
     let stacks = [];
 

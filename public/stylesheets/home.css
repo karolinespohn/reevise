@@ -78,10 +78,13 @@ popup
     color: #58616E;
     padding: 16px;
     border-radius: 8px;
-    height: 200px;
     width: 400px;
     background-color: white;
     opacity: 1;
+}
+
+.newStackOrFolder {
+    height: 200px;
 }
 
 .createButton {
@@ -102,7 +105,11 @@ popup
 
 }
 
-.popupError {
+.popupText {
     width: 100%;
     text-align: center;
+}
+
+.deleteFolderOrStack {
+    color: #f96a59;
 }

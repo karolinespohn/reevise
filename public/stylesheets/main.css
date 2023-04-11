@@ -65,7 +65,8 @@ form components
     line-height: 16px;
     margin-top: 12px;
     margin-bottom: 8px;
-    border: 1px solid #798DBF
+    border: 1px solid #798DBF;
+    text-align: center;
 }
 
 

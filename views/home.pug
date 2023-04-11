@@ -8,28 +8,75 @@ html(lang="en")
             //-
                 popups
             //
+
+
         div.popupBackgroundHidden.popupBackground(id="popup-background")
 
-            div.popupHidden.popup(id="new-folder-popup")
+            // new folder popup
+            div.popupHidden.popup.newStackOrFolder(id="new-folder-popup")
+                button.closeButton(id="close-folder-popup-button")
                 form(id="new-folder-form", method="POST")
-                    button.closeButton(id="close-folder-popup-button")
                     div.popupInputContainer()
                         input.inputField.nameInput(id="new-folder-name", name="folderName", type="text", placeholder="name")
                         input.submitFormButton.createButton(id="create-folder-button", type="submit", value="create folder")
-                    div.popupError()
+                    div.popupText()
                         p(id="folder-name-error", style="display:none") please enter a valid name
 
-
-            div.popupHidden.popup(id="new-stack-popup")
+            // new stack popup
+            div.popupHidden.popup.newStackOrFolder(id="new-stack-popup")
                 form(id="new-stack-form", method="POST")
                     button.closeButton(id="close-stack-popup-button")
                     div.popupInputContainer()
                         input.inputField.nameInput(id="new-stack-name", name="stackName", type="text", placeholder="name")
                         input.submitFormButton.createButton(id="create-stack-button", type="submit", value="create stack")
-                    div.popupError()
+                    div.popupText()
                         p(id="stack-name-error", style="display:none") please enter a valid name
 
-        //-
+            div.popupHidden.popup(id="folder-options-popup")
+                form(id="folder-options-form", method="POST")
+                    button.closeButton(id="close-folder-options-button")
+                    div.popupInputContainer
+                        div.changeName
+                            input(id="changedFolderID", name="changedFolderID", type="hidden")
+                            input.inputField.nameInput(id="changed-folder-name", name="changedFolderName", type="text", placeholder="new name")
+                            input.submitFormButton.createButton(id="rename-folder-button", type="submit", value="rename folder")
+                    div.popupText()
+                        p(id="folder-namechange-error", style="display:none") please enter a valid name
+                hr
+                div.deleteFolderOrStack
+                    button.submitFormButton.createButton.deleteFolderOrStack(id="delete-folder-first-button") delete
+
+            div.popupHidden.popup(id="delete-folder-popup")
+                button.closeButton(id="close-delete-folder-popup-button")
+                form(id="delete-folder-form", method="POST")
+                    p.popupText are you sure you want to delete this folder?
+                    button.submitFormButton.createButton(id="stop-folder-deletion") keep folder
+                    input.submitFormButton.createButton.deleteFolderOrStack(id="delete-folder", type="submit", value="delete folder")
+
+            div.popupHidden.popup(id="stack-options-popup")
+                form(id="stack-options-form", method="POST")
+                    button.closeButton(id="close-stack-options-button")
+                    div.popupInputContainer
+                        div.changeName
+                            input(id="changedStackID", name="changedStackID", type="hidden")
+                            input.inputField.nameInput(id="changed-stack-name", name="changedStackName", type="text", placeholder="new name")
+                            input.submitFormButton.createButton(id="rename-stack-button", type="submit", value="rename stack")
+                    div.popupText()
+                        p(id="stack-namechange-error", style="display:none") please enter a valid name
+                hr
+                div.deleteFolderOrStack
+                    button.submitFormButton.createButton.deleteFolderOrStack(id="delete-stack-first-button") delete
+
+            div.popupHidden.popup(id="delete-stack-popup")
+                button.closeButton(id="close-delete-stack-popup-button")
+                form(id="delete-stack-form", method="POST")
+                    p.popupText are you sure you want to delete this stack?
+                    button.submitFormButton.createButton(id="stop-stack-deletion") keep stack
+                    input.submitFormButton.createButton.deleteFolderOrStack(id="delete-stack", type="submit", value="delete stack")
+
+
+
+        //
           file system
         //
         div.fileSystem.contentSection
@@ -53,7 +100,7 @@ html(lang="en")
                         div.folderOrStackList
                             each val in folderObjects
                                 p
-                                    a(href="/home?id=" + val.folderID)=val.folderName
+                                    a.folder(id="folder", href="/home?id=" + val.folderID, folderID=val.folderID)=val.folderName
                 if folderObjects.length > 0 && stackObjects.length > 0
                     hr
                 div.stacksSection
@@ -62,7 +109,7 @@ html(lang="en")
                         div.folderOrStackList
                             each val in stackObjects
                                 p
-                                    a(href="/stack?id=" + val.stackID)=val.stackName
+                                    a.stack(href="/stack?id=" + val.stackID, stackID=val.stackID)=val.stackName
                     div(class="container")
                         if errors
                             p
@@ -74,42 +121,114 @@ html(lang="en")
         script(src="vendor/bootstrap/js/bootstrap.bundle.min.js")
 
         script.
-            // new folder button functionality
+            function closePopup(e, popupName, inputFieldName, errors) {
+                e.preventDefault()
+                document.getElementById(popupName).classList.add("popupHidden")
+                document.getElementById("popup-background").classList.add("popupBackgroundHidden")
+                if (inputFieldName) document.getElementById(inputFieldName).value = ''
+                if (errors) document.getElementById(errors).style.display = "none"
+            }
+
+            function checkNameValidity(e, name, error) {
+                const nameInput = document.getElementById(name)
+                if (!nameInput.value || nameInput.value.length > 64 || nameInput.value.trim() === "") {
+                    e.preventDefault()
+                    document.getElementById(error).style.display = "block"
+                }
+            }
+
+
+            // display new stack or new folder button
             document.getElementById("new-folder").addEventListener("click", () => {
                 document.getElementById("new-folder-popup").classList.remove("popupHidden")
                 document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
             })
-
-            // close new folder popup by clicking on close button
-            document.getElementById("close-folder-popup-button").addEventListener("click", (e) => {
-                e.preventDefault()
-                document.getElementById("new-folder-popup").classList.add("popupHidden")
-                document.getElementById("popup-background").classList.add("popupBackgroundHidden")
-                document.getElementById("new-folder-name").value = ''
-                document.getElementById("folder-name-error").style.display = "none"
-
+            document.getElementById("new-stack").addEventListener("click", () => {
+                document.getElementById("new-stack-popup").classList.remove("popupHidden")
+                document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
             })
 
-            //close new folder popup by clicking on background
+            // display folder or stack options popup
+            const folders = document.querySelectorAll('.folder');
+            folders.forEach(folder => {
+                folder.addEventListener("contextmenu", (e) => {
+                    e.preventDefault()
+                    document.getElementById("changedFolderID").value = e.target.getAttribute("folderID")
+                    document.getElementById("folder-options-popup").classList.remove("popupHidden")
+                    document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
+
+                })
+            })
+            const stacks = document.querySelectorAll('.stack');
+            stacks.forEach(stack => {
+                stack.addEventListener("contextmenu", (e) => {
+                    e.preventDefault()
+                    document.getElementById("changedStackID").value = e.target.getAttribute("stackID")
+                    document.getElementById("stack-options-popup").classList.remove("popupHidden")
+                    document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
+
+                })
+            })
+
+            //close popup by clicking on background
             document.getElementById("new-folder-popup").addEventListener("click", (e) => {
                 e.stopPropagation()
             })
-            document.getElementById("popup-background").addEventListener("click", (e) => {
-                e.preventDefault()
-                document.getElementById("new-folder-popup").classList.add("popupHidden")
-                document.getElementById("popup-background").classList.add("popupBackgroundHidden")
-                document.getElementById("new-folder-name").value = ''
-                document.getElementById("folder-name-error").style.display = "none"
+            document.getElementById("new-stack-popup").addEventListener("click", (e) => {
+                e.stopPropagation()
+            })
 
+            document.getElementById("folder-options-popup").addEventListener("click", (e) => {
+                e.stopPropagation()
+            })
+            document.getElementById("stack-options-popup").addEventListener("click", (e) => {
+                e.stopPropagation()
+            })
+
+            document.getElementById("delete-folder-popup").addEventListener("click", (e) => {
+                e.stopPropagation()
+            })
+            document.getElementById("delete-stack-popup").addEventListener("click", (e) => {
+                e.stopPropagation()
+            })
+
+            document.getElementById("popup-background").addEventListener("click", (e) => {
+                closePopup(e, "new-folder-popup", "new-folder-name", "folder-name-error")
+                closePopup(e, "new-stack-popup", "new-stack-name", "stack-name-error")
+
+                closePopup(e, "folder-options-popup","changed-folder-name", "folder-namechange-error")
+                closePopup(e, "stack-options-popup","changed-stack-name", "stack-namechange-error")
+
+                closePopup(e, "delete-folder-popup", null, null)
+                closePopup(e, "delete-stack-popup", null, null)
+            })
+
+            // close popup by clicking on close button
+            document.getElementById("close-folder-popup-button").addEventListener("click", (e) => {
+                closePopup(e, "new-folder-popup", "new-folder-name", "folder-name-error")
+            })
+
+            document.getElementById("close-stack-popup-button").addEventListener("click", (e) => {
+                closePopup(e, "new-stack-popup", "new-stack-name", "stack-name-error")
+            })
+
+            document.getElementById("close-folder-options-button").addEventListener("click", (e) => {
+                closePopup(e, "folder-options-popup", "changed-folder-name", "folder-namechange-error")
+            })
+            document.getElementById("close-stack-options-button").addEventListener("click", (e) => {
+                closePopup(e, "stack-options-popup", "changed-stack-name", "stack-namechange-error")
+            })
+
+            document.getElementById("close-delete-folder-popup-button").addEventListener("click", (e) => {
+                closePopup(e, "delete-folder-popup", null, null)
+            })
+            document.getElementById("close-delete-stack-popup-button").addEventListener("click", (e) => {
+                closePopup(e, "delete-stack-popup", null, null)
             })
 
             // check if name is valid (between 1 and 64 chars, consisiting of not only white spaces)
             document.getElementById("new-folder-form").addEventListener("submit", (e) => {
-                const nameInput = document.getElementById("new-folder-name")
-                if (!nameInput.value || nameInput.value.length > 64 || nameInput.value.trim() === "") {
-                    e.preventDefault()
-                    document.getElementById("folder-name-error").style.display = "block"
-                }
+                checkNameValidity(e, "new-folder-name", "folder-name-error")
             })
             // send new folder form by pressing on enter while in nameInput field
             document.getElementById("new-folder-name").addEventListener("keydown", (e) => {
@@ -119,41 +238,10 @@ html(lang="en")
                 }
             })
 
-            // new stack button functionality
-            document.getElementById("new-stack").addEventListener("click", () => {
-                document.getElementById("new-stack-popup").classList.remove("popupHidden")
-                document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
-            })
-
-            // close new stack popup by clicking on close button
-            document.getElementById("close-stack-popup-button").addEventListener("click", (e) => {
-                e.preventDefault()
-                document.getElementById("new-stack-popup").classList.add("popupHidden")
-                document.getElementById("popup-background").classList.add("popupBackgroundHidden")
-                document.getElementById("new-stack-name").value = ''
-                document.getElementById("stack-name-error").style.display = "none"
-            })
-
-            // close new stack popup by clicking on background
-
-            document.getElementById("new-stack-popup").addEventListener("click", (e) => {
-                e.stopPropagation()
-            })
-            document.getElementById("popup-background").addEventListener("click", (e) => {
-                e.preventDefault()
-                document.getElementById("new-stack-popup").classList.add("popupHidden")
-                document.getElementById("popup-background").classList.add("popupBackgroundHidden")
-                document.getElementById("new-stack-name").value = ''
-                document.getElementById("stack-name-error").style.display = "none"
-            })
-            // check if name is valid (between 1 and 64 chars, consisiting of not only white spaces)
             document.getElementById("new-stack-form").addEventListener("submit", (e) => {
-                const nameInput = document.getElementById("new-stack-name")
-                if (!nameInput.value || nameInput.value.length > 64 || nameInput.value.trim() === "") {
-                    e.preventDefault()
-                    document.getElementById("stack-name-error").style.display = "block"
-                }
+                checkNameValidity(e, "new-stack-name", "stack-name-error")
             })
+
             // send new stack form by pressing on enter while in nameInput field
             document.getElementById("new-stack-name").addEventListener("keydown", (e) => {
                 if (e.key === "Enter") {
@@ -162,3 +250,38 @@ html(lang="en")
                 }
             })
 
+            document.getElementById("folder-options-form").addEventListener("submit", (e) => {
+                checkNameValidity(e, "changed-folder-name", "folder-namechange-error")
+            })
+
+            document.getElementById("changed-folder-name").addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault()
+                    document.getElementById("folder-options-form").submit();
+                }
+            })
+            document.getElementById("stack-options-form").addEventListener("submit", (e) => {
+                checkNameValidity(e, "changed-stack-name", "stack-namechange-error")
+            })
+
+            document.getElementById("changed-stack-name").addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault()
+                    document.getElementById("stack-options-form").submit();
+                }
+            })
+
+            document.getElementById("delete-folder-first-button").addEventListener("click", (e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                document.getElementById("folder-options-popup").classList.add("popupHidden")
+                document.getElementById("delete-folder-popup").classList.remove("popupHidden")
+                document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
+            })
+            document.getElementById("delete-stack-first-button").addEventListener("click", (e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                document.getElementById("stack-options-popup").classList.add("popupHidden")
+                document.getElementById("delete-stack-popup").classList.remove("popupHidden")
+                document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
+            })

@@ -57,20 +57,29 @@ html(lang="en")
         link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css")
 
         script.
-            // "saves" flashcard that was just answered so the database can be adjusted
+            function turnAroundBack() {
+                if (document.getElementById("back").style.display === "block") {
+                    document.getElementById("back").style.display = "none"
+                    document.getElementById("backPlaceholder").style.display = "block"
+                } else {
+                    document.getElementById("back").style.display = "block"
+                    document.getElementById("backPlaceholder").style.display = "none"
+                }
+            }
 
             const frontData = !{flashcard.front}
-            console.log(frontData)
+            // console.log(frontData)
             const backData = !{flashcard.back}
-            console.log(backData)
+            // console.log(backData)
+            // initial display style of back is none, and can be changed through clicking
+
+            document.getElementById("back").style.display = "none"
+
             document.getElementById("flashcardContents").addEventListener("click", () => {
-               if (document.getElementById("back").style.display === "block") {
-                   document.getElementById("back").style.display = "none"
-                   document.getElementById("backPlaceholder").style.display= "block"
-               } else {
-                   document.getElementById("back").style.display = "block"
-                   document.getElementById("backPlaceholder").style.display = "none"
-               }
+                turnAroundBack()
+            })
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" || e.key === " ") turnAroundBack()
             })
 
             const frontEditor = new EditorJS({
