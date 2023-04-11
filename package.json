@@ -23,6 +23,7 @@
     "@editorjs/list": "^1.8.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
+    "editorjs-latex": "^1.0.0",
     "express": "^4.16.3",
     "jsonwebtoken": "^9.0.0",
     "pg-promise": "^11.3.0",

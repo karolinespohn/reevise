@@ -134,3 +134,11 @@ a.sectionHeaderButton:hover {
     align-items: center;
     margin-left: 32px;
 }
+.codex-editor__redactor {
+    padding-bottom: 0 !important;
+}
+
+
+.math-preview {
+    border: none !important;
+}

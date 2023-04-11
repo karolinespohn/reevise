@@ -6,7 +6,7 @@ exports.stack = async function (req, res) {
     if (req.body.difficulty) {
 
         const levelChanges = [-2, 0, 1, 2]
-        adjustFlashcard(req.body.difficulty, req.body.answeredFlashcard)
+        await adjustFlashcard(req.body.difficulty, req.body.answeredFlashcard)
     }
 
     let errors = []

@@ -2,30 +2,37 @@ doctype html
 html(lang="en")
     include includes/head.pug
     body
-
         //- Page Content
-        section
-
         form(id="inputForm", method="POST")
             input(id="frontDataInput", type="hidden", name="frontDataInput")
             input(id="backDataInput", type="hidden", name="backDataInput")
+        div.contentSection
+            div.sectionHeader
+                div.leftSectionHeaderButtonContainer
+                    a.sectionHeaderButton(href="/home") home
 
-        div(class="container")
-            p(id="front")
-            p(id="back")
-            button(id="submit") submit
+            div.flashcard
+                p.front(id="front")
+                p.back(id="back")
+            div.submitChangesButtonContainer
+                button.submitFormButton.submitChangesButton(id="submit") submit
 
 
-                div(class="container")
-                    if errors
-                        p
-                            each val in errors
-                                p=val
+                    div(class="container")
+                        if errors
+                            p
+                                each val in errors
+                                    p=val
+
 
         script(src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest")
         script(src="https://cdn.jsdelivr.net/npm/@editorjs/header@2.7.0/dist/bundle.min.js")
         script(src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest")
         script(src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest")
+        script(src="https://cdn.jsdelivr.net/gh/mdgaziur/EditorJS-LaTeX@latest/dist/editorjs-latex.bundle-min.js")
+        link(rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mdgaziur/EditorJS-LaTeX@latest/dist/editorjs-latex.bundle.min.css")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js")
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css")
 
 
         script.
@@ -54,6 +61,10 @@ html(lang="en")
                             quotePlaceholder: "quote",
                             captionPlaceholder: "author",
                         },
+                    },
+                    Math: {
+                        class: EJLaTeX,
+                        shortcut: 'CMD+SHIFT+M'
                     },
                 },
 
@@ -86,6 +97,10 @@ html(lang="en")
                             quotePlaceholder: "quote",
                             captionPlaceholder: "author",
                         },
+                    },
+                    Math: {
+                        class: EJLaTeX,
+                        shortcut: 'CMD+SHIFT+M'
                     },
                 },
 

@@ -14,7 +14,7 @@ html(lang="en")
                      a.sectionHeaderButton(href="/home?id=" + parentFolder) up
                 div.rightSectionHeaderButtonContainer
                     if flashcard
-                     a.sectionHeaderButton(href="/editStack") edit stack
+                     //a.sectionHeaderButton(href="/editStack") edit stack
                      a.sectionHeaderButton(href="/edit?id=" + flashcard.flashcardID) edit card
                      a.sectionHeaderButton(href="/edit?parentID=" + flashcardParent) new card
 
@@ -50,6 +50,11 @@ html(lang="en")
         script(src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest")
         script(src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest")
 
+
+        script(src="/javascripts/editorjs-latex.bundle.js")
+        link(rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mdgaziur/EditorJS-LaTeX@latest/dist/editorjs-latex.bundle.min.css")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js")
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css")
 
         script.
             // "saves" flashcard that was just answered so the database can be adjusted
@@ -91,6 +96,10 @@ html(lang="en")
                             captionPlaceholder: "author",
                         },
                     },
+                    Math: {
+                        class: EJLaTeX,
+                        shortcut: 'CMD+SHIFT+M'
+                    },
                 },
 
                 readOnly: true,
@@ -119,6 +128,10 @@ html(lang="en")
                             quotePlaceholder: "quote",
                             captionPlaceholder: "author",
                         },
+                    },
+                    Math: {
+                        class: EJLaTeX,
+                        shortcut: 'CMD+SHIFT+M'
                     },
                 },
 
