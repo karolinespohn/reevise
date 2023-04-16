@@ -22,12 +22,15 @@ exports.stack = async function (req, res) {
         errors.push("internal error")
     }
     let flashcardID
+    let stackNotEmpty
     let flashcardParent = req.query.id
     if (typeof flashcard !== "undefined") {
+        stackNotEmpty = true
         flashcard.front = JSON.stringify(flashcard.front)
         flashcard.back = JSON.stringify(flashcard.back)
         flashcardID = flashcard.flashcardID
     } else {
+        stackNotEmpty = false
         flashcard = {
             front: {},
             back: {},
@@ -38,7 +41,7 @@ exports.stack = async function (req, res) {
     // checks if parent is root
     let directlyUnderRoot = parentFolder === null
 
-    res.render("stack", {parentFolder, flashcard, flashcardID, flashcardParent, errors, directlyUnderRoot})
+    res.render("stack", {parentFolder, flashcard, flashcardID, flashcardParent, errors, directlyUnderRoot, stackNotEmpty})
 }
 
 async function adjustFlashcard(difficulty, answeredFlashcard) {

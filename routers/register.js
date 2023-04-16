@@ -27,13 +27,13 @@ exports.register = async function (req, res) {
         } catch (e) {
             // unique constraint on username & email -> if exception i check if duplicate username/email was entered
 
-            let duplicateUsers = await db.query('SELECT * FROM users WHERE username = $1', req.body.username);
+            let duplicateUsers = await db.query('SELECT * FROM users WHERE username ILIKE $1', req.body.username);
             if (duplicateUsers.length !== 0) {
                 duplicates.push("this username is already taken")
             }
 
             // checks if email is already taken
-            let duplicateEmail = await db.query('SELECT * FROM users WHERE email = $1', req.body.email);
+            let duplicateEmail = await db.query('SELECT * FROM users WHERE email ILIKE $1', req.body.email);
             if (duplicateEmail.length !== 0) {
                 duplicates.push("there is already an account registered to this email address")
             }

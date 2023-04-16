@@ -32,6 +32,7 @@ html(lang="en")
                     div.popupText()
                         p(id="stack-name-error", style="display:none") please enter a valid name
 
+            // folder options popup
             div.popupHidden.popup(id="folder-options-popup")
                 form(id="folder-options-form", method="POST")
                     button.closeButton(id="close-folder-options-button")
@@ -46,13 +47,16 @@ html(lang="en")
                 div.deleteFolderOrStack
                     button.submitFormButton.createButton.deleteFolderOrStack(id="delete-folder-first-button") delete
 
+            //delete folder popup
             div.popupHidden.popup(id="delete-folder-popup")
                 button.closeButton(id="close-delete-folder-popup-button")
                 form(id="delete-folder-form", method="POST")
-                    p.popupText are you sure you want to delete this folder?
-                    button.submitFormButton.createButton(id="stop-folder-deletion") keep folder
-                    input.submitFormButton.createButton.deleteFolderOrStack(id="delete-folder", type="submit", value="delete folder")
+                    p.popupText are you sure you want to delete this folder and its contents?
+                    button.submitFormButton.createButton(id="keep-folder-button") keep folder
+                    input(id="deletedFolderID", name="deletedFolderID", type="hidden")
+                    input.submitFormButton.createButton.deleteFolderOrStack(id="delete-folder", name="deleteFolder" type="submit", value="delete folder")
 
+            // stack options popup
             div.popupHidden.popup(id="stack-options-popup")
                 form(id="stack-options-form", method="POST")
                     button.closeButton(id="close-stack-options-button")
@@ -67,12 +71,14 @@ html(lang="en")
                 div.deleteFolderOrStack
                     button.submitFormButton.createButton.deleteFolderOrStack(id="delete-stack-first-button") delete
 
+            // delete stack popup
             div.popupHidden.popup(id="delete-stack-popup")
                 button.closeButton(id="close-delete-stack-popup-button")
                 form(id="delete-stack-form", method="POST")
-                    p.popupText are you sure you want to delete this stack?
+                    p.popupText are you sure you want to delete this stack and its contents?
                     button.submitFormButton.createButton(id="stop-stack-deletion") keep stack
-                    input.submitFormButton.createButton.deleteFolderOrStack(id="delete-stack", type="submit", value="delete stack")
+                    input(id="deletedStackID", name="deletedStackID", type="hidden")
+                    input.submitFormButton.createButton.deleteFolderOrStack(id="delete-stack", name="deleteStack", type="submit", value="delete stack")
 
 
 
@@ -100,7 +106,7 @@ html(lang="en")
                         div.folderOrStackList
                             each val in folderObjects
                                 p
-                                    a.folder(id="folder", href="/home?id=" + val.folderID, folderID=val.folderID)=val.folderName
+                                    a.folder.folderOrStack(href="/home?id=" + val.folderID, folderID=val.folderID)=val.folderName
                 if folderObjects.length > 0 && stackObjects.length > 0
                     hr
                 div.stacksSection
@@ -109,7 +115,7 @@ html(lang="en")
                         div.folderOrStackList
                             each val in stackObjects
                                 p
-                                    a.stack(href="/stack?id=" + val.stackID, stackID=val.stackID)=val.stackName
+                                    a.stack.folderOrStack(href="/stack?id=" + val.stackID, stackID=val.stackID)=val.stackName
                     div(class="container")
                         if errors
                             p
@@ -150,20 +156,22 @@ html(lang="en")
 
             // display folder or stack options popup
             const folders = document.querySelectorAll('.folder');
+            let changedFolderID
             folders.forEach(folder => {
                 folder.addEventListener("contextmenu", (e) => {
                     e.preventDefault()
-                    document.getElementById("changedFolderID").value = e.target.getAttribute("folderID")
+                    changedFolderID = document.getElementById("changedFolderID").value = e.target.getAttribute("folderID")
                     document.getElementById("folder-options-popup").classList.remove("popupHidden")
                     document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
 
                 })
             })
             const stacks = document.querySelectorAll('.stack');
+            let changedStackID;
             stacks.forEach(stack => {
                 stack.addEventListener("contextmenu", (e) => {
                     e.preventDefault()
-                    document.getElementById("changedStackID").value = e.target.getAttribute("stackID")
+                    changedStackID = document.getElementById("changedStackID").value = e.target.getAttribute("stackID")
                     document.getElementById("stack-options-popup").classList.remove("popupHidden")
                     document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
 
@@ -274,6 +282,8 @@ html(lang="en")
             document.getElementById("delete-folder-first-button").addEventListener("click", (e) => {
                 e.preventDefault()
                 e.stopPropagation()
+                console.log(changedFolderID)
+                document.getElementById("deletedFolderID").value = changedFolderID
                 document.getElementById("folder-options-popup").classList.add("popupHidden")
                 document.getElementById("delete-folder-popup").classList.remove("popupHidden")
                 document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
@@ -281,7 +291,12 @@ html(lang="en")
             document.getElementById("delete-stack-first-button").addEventListener("click", (e) => {
                 e.preventDefault()
                 e.stopPropagation()
+                document.getElementById("deletedStackID").value= changedStackID
                 document.getElementById("stack-options-popup").classList.add("popupHidden")
                 document.getElementById("delete-stack-popup").classList.remove("popupHidden")
                 document.getElementById("popup-background").classList.remove("popupBackgroundHidden")
+            })
+
+            document.getElementById("keep-folder-button").addEventListener("click", (e) => {
+                closePopup(e, "delete-folder-popup", null, null)
             })

@@ -13,14 +13,18 @@ html(lang="en")
                      a.sectionHeaderButton(href="/home") home
                      a.sectionHeaderButton(href="/home?id=" + parentFolder) up
                 div.rightSectionHeaderButtonContainer
-                    if flashcard
+                    if stackNotEmpty
                      //a.sectionHeaderButton(href="/editStack") edit stack
                      a.sectionHeaderButton(href="/edit?id=" + flashcard.flashcardID) edit card
                      a.sectionHeaderButton(href="/edit?parentID=" + flashcardParent) new card
+                    else
+                     a.sectionHeaderButton(href="/edit?parentID=" + flashcardParent) new card
+
+
 
 
             div.flashcard
-                if flashcard
+                if stackNotEmpty
                     div.flashcardContents(id="flashcardContents")
                         div.front(id="front")
                         //p.backPlaceholder(id="backPlaceholder", style="display:block")

@@ -5,7 +5,7 @@ exports.home = async function (req, res) {
     let current;
     let parent = null;
     //jetztiger ordner = req.body.id
-
+    // console.log(req.body)
     // checks if there is a folderid
     if (req.query.id) {
         try {
@@ -71,7 +71,6 @@ exports.home = async function (req, res) {
     }
     // user renames stack
     if (req.body && req.body.changedStackName) {
-        console.log("aaaa")
         if (!req.body.changedStackName.length < 1 || !req.body.changedStackName.length > 64) {
             try {
                 await db.none('update stacks SET "stackName" = $1 where "stackID"= $2', [req.body.changedStackName, req.body.changedStackID])
@@ -82,6 +81,14 @@ exports.home = async function (req, res) {
 
             }
         }
+    }
+    // user deletes folder
+    if (req.body && req.body.deleteFolder) {
+        await db.none('delete from folders where "folderID" = $1', [req.body.deletedFolderID])
+    }
+    // user deletes stack
+    if (req.body && req.body.deleteStack) {
+        await db.none('delete from stacks where "stackID" = $1', [req.body.deletedStackID])
     }
 
     let folders = [];
@@ -99,12 +106,15 @@ exports.home = async function (req, res) {
     } catch (e) {
         console.log(e)
     }
+
     let folderObjects = []
     for (let f of folders) {
         let folderName = f.folderName
         let folderID = f.folderID
         folderObjects.push({folderName, folderID})
     }
+
+    stacks.sort()
     let stackObjects = []
     for (let s of stacks) {
         let stackName = s.stackName
@@ -114,4 +124,6 @@ exports.home = async function (req, res) {
 
     res.render("home", {folderObjects, stackObjects, errors, parent, directlyUnderRoot})
 }
+
+
 

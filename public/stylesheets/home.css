@@ -38,6 +38,13 @@ File System
     font-size: 18px;
     text-decoration-line: underline;
 }
+.folderOrStack {
+    color: #798DBF;
+}
+.folderOrStack:hover {
+    color: black;
+    text-decoration: none;
+}
 
 .foldersSection {
     padding: 32px;
