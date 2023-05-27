@@ -1,4 +1,7 @@
 const db = require('./db')
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 exports.register = async function (req, res) {
     let errors = [];
     // user submitted something
@@ -22,6 +25,10 @@ exports.register = async function (req, res) {
         let duplicates = [];
 
         try {
+
+            let user = await db.query('SELECT * FROM users WHERE username ILIKE $1 or email ILIKE $1', req.body.emailOrUsername)
+            if (user.length !== 0) throw new SQLException()
+
             await db.none('insert into users(email, username, password) values($1, $2, $3)',
                 [req.body.email, req.body.username, req.body.password])
         } catch (e) {

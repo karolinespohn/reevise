@@ -1,10 +1,15 @@
 const db = require("./db")
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 require("dotenv").config();
 exports.login = async function (req, res) {
     // user submitted data
     if (req.body && req.body.emailOrUsername && req.body.password) {
-        let user = await db.query('SELECT * FROM users WHERE username = $1 or email = $1', req.body.emailOrUsername)
+
+        let user = await db.query('SELECT * FROM users WHERE username ILIKE $1 or email ILIKE $1', req.body.emailOrUsername)
+
         let errors = []
 
         // there is no user with this email/username
@@ -18,7 +23,7 @@ exports.login = async function (req, res) {
                 errors.push("there is no account registered to this username")
             }
             res.render("login", {errors: errors})
-            // there is an user with this username/email
+            // there is a user with this username/email
         } else {
             // check password if username was entered
             if (user[0].password === req.body.password) {

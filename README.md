@@ -1,4 +1,4 @@
-# nodejs-pug-starter
+# Revise
 
 This project is a simple application skeleton for a NodeJs web app with PugJs templating. You can use it to quickly bootstrap your NodeJs web app projects and dev environment for these projects.
 
