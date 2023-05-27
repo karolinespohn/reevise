@@ -10,9 +10,9 @@ const {requireAuth} = require("./loginMiddleware");
 
 
 router.get("/", function(req, res) {
-  res.render("index", {
-  })
+  res.redirect("/login")
 });
+
 router.get("/register", register)
 router.post("/register", register)
 
