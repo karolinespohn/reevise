@@ -26,7 +26,8 @@ exports.login = async function (req, res) {
             // there is a user with this username/email
         } else {
             // check password if username was entered
-            if (user[0].password === req.body.password) {
+
+            if (bcrypt.compareSync(req.body.password, user[0].password)) {
                 const uid = user[0].uid
                 let token = jwt.sign({
                     uid: uid,

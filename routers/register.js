@@ -26,12 +26,13 @@ exports.register = async function (req, res) {
 
         try {
 
-            let user = await db.query('SELECT * FROM users WHERE username ILIKE $1 or email ILIKE $1', req.body.emailOrUsername)
+            let user = await db.query('SELECT * FROM users WHERE username ILIKE $1 or email ILIKE $2', [req.body.username, req.body.email])
             if (user.length !== 0) throw new SQLException()
-
+            let hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
             await db.none('insert into users(email, username, password) values($1, $2, $3)',
-                [req.body.email, req.body.username, req.body.password])
+                [req.body.email, req.body.username, hashedPassword])
         } catch (e) {
+
             // unique constraint on username & email -> if exception i check if duplicate username/email was entered
 
             let duplicateUsers = await db.query('SELECT * FROM users WHERE username ILIKE $1', req.body.username);
