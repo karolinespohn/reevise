@@ -14,7 +14,7 @@ html(lang="en")
                     if stackNotEmpty
                         //a.sectionHeaderButton(href="/editStack") edit stack
                         a.sectionHeaderButton(href="/edit?id=" + flashcard.flashcardID) edit card
-                        a.sectionHeaderButton(href="/edit?parentID=" + flashcardParent) new card
+                        a.sectionHeaderButton(id="newCardButton", href="/edit?parentID=" + flashcardParent) new card
                     else
                         a.sectionHeaderButton(href="/edit?parentID=" + flashcardParent) new card
 
@@ -79,7 +79,9 @@ html(lang="en")
 
             document.addEventListener("keydown", (e) => {
                 if (e.key === "Enter" || e.key === " " || e.key === "0") turnAroundBack()
+                if (e.key === "n") document.getElementById("newCardButton").click()
             })
+
 
             // change flashcard using shortcuts 1/a, 2/s, 3/d, 4/f
             document.addEventListener("keydown", (e) => {
